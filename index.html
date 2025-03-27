@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini 챗봇</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+  <script
+    src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+  <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000"
+    data-border-radius="small"></script>
+  <link rel="stylesheet" href="history_add2_styles.css"> <!-- ✨ 분리된 CSS 파일 링크 ✨ -->
+
+  <!-- ✨✨✨ marked.js 라이브러리 추가 ✨✨✨ -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+
+<body class="bg-gray-900 text-white font-sans">
+  <!-- ✨✨✨ 사이드바 펼치기 버튼 (기본적으로 숨겨져 있음) ✨✨✨ -->
+  <button id="expand-sidebar-button"
+    class="fixed top-4 right-4 w-8 h-8 flex items-center justify-center bg-gray-800 hover:bg-gray-700 rounded-full z-50 hidden"
+    title="사이드바 펼치기">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
+  <div class="flex h-screen">
+    <aside id="chat-history-sidebar" class="bg-gray-800 border-r border-gray-700 p-4 flex-none flex-col">
+      <h2 class="text-lg font-semibold mb-2">대화 기록</h2>
+      <div id="chat-history-list" class="overflow-y-auto flex-1">
+        <!-- 채팅 히스토리 목록이 여기에 추가됩니다 -->
+      </div>
+       <!-- ✨✨✨ 기록 관리 버튼 영역 ✨✨✨ -->
+  <div class="mt-4 space-y-2"> <!-- 버튼들을 감싸고 간격을 줍니다 -->
+    <button id="export-history-button" class="w-full px-3 py-1.5 text-sm !rounded-button bg-blue-700 hover:bg-blue-600">
+      기록 내보내기
+    </button>
+    <button id="import-history-button" class="w-full px-3 py-1.5 text-sm !rounded-button bg-green-700 hover:bg-green-600">
+      기록 가져오기
+    </button>
+    <input type="file" id="import-file-input" accept=".json" style="display: none;"> <!-- 숨겨진 파일 입력 -->
+    <button id="delete-history-button" class="w-full">전체 삭제</button> <!-- 기존 버튼 (Tailwind 클래스 제거하고 CSS 의존) -->
+  </div>
+</aside>
+    <div class="flex-1 flex">
+      <main class="flex-1 ml-0">
+        <header class="h-16 flex items-center justify-between px-4 border-b border-gray-700">
+          <div class="flex-1"></div>
+          <div class="flex items-center">
+            <span class="ml-2 text-xl font-semibold">Gemini 챗봇</span>
+          </div>
+          <div class="flex-1 flex justify-end space-x-4">
+            <button id="new-chat-button" class="px-3 py-1.5 text-sm !rounded-button bg-gray-700 hover:bg-gray-600">
+              새 채팅
+            </button>
+            <button id="refresh-button" class="w-8 h-8 flex items-center justify-center hover:bg-gray-700 rounded-full"
+              title="새로고침">
+              <i class="fas fa-redo"></i>
+            </button>
+          </div>
+        </header>
+
+        <div class="flex cont">
+          <div class="flex-1 p-8 flex flex-col">
+            <div id="url-area">
+              <label for="server-domain">서버 도메인:</label>
+              <input type="text" id="server-domain" placeholder="예: a41b-35-245-30-102">
+              <button id="set-url">URL 설정</button>
+              <span id="full-url"></span>
+            </div>
+            <div id="chat-area" class="flex-1">
+              <!-- Chat messages will be appended here -->
+            </div>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-900 border-t border-gray-700">
+          <div class="max-w-4xl mx-auto flex items-center">
+            <div class="flex-1 bg-gray-800 rounded-lg flex items-center">
+              <textarea id="user-input" placeholder="무엇이든 물어보세요..." rows="1"
+                class="w-full px-4 py-3 bg-transparent border-0 focus:ring-0 text-white placeholder-gray-400 resize-none overflow-y-hidden"></textarea>
+            </div>
+
+            <button id="send-button"
+              class="ml-4 px-4 py-2 !rounded-button bg-gray-700 hover:bg-gray-600 flex items-center">
+              <i class="fas fa-paper-plane mr-2"></i>
+              보내기
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <aside id="settings-sidebar"
+        class="w-80 bg-gray-800 border-l border-gray-700 p-4 flex flex-col transition-all duration-300 ease-in-out">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold">Run settings</h2>
+          <button id="toggle-sidebar-button"
+            class="w-8 h-8 flex items-center justify-center hover:bg-gray-700 rounded-full" title="사이드바 접기/펼치기">
+            <i id="sidebar-toggle-icon" class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="mb-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold mb-1">Model</h3>
+            <button class="text-sm text-gray-500 hover:text-gray-400"><i class="fas fa-code"></i> Get code</button>
+          </div>
+          <select id="style-selector-sidebar" class="w-full bg-gray-700 text-white rounded-md p-2">
+            <option value="default">기본 스타일</option>
+            <option value="math_expert">수학 전문가</option>
+            <option value="travel_expert">여행 전문가</option>
+            <option value="history_expert">역사 전문가</option>
+            <option value="dog_expert">멍뭉이</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-1">Temperature</h3>
+          <div class="flex items-center">
+            <input type="range" id="temperature-slider" class="flex-1 bg-gray-700 rounded-md h-2" min="0" max="1"
+              step="0.1" value="0.7">
+            <span id="temperature-value" class="ml-2 text-sm">0.7</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-1">Top P</h3>
+          <div class="flex items-center">
+            <input type="range" id="top-p-slider" class="flex-1 bg-gray-700 rounded-md h-2" min="0" max="1" step="0.05"
+              value="0.95">
+            <span id="top-p-value" class="ml-2 text-sm">0.95</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-1">Token count</h3>
+          <div class="bg-gray-700 rounded-md p-2 text-sm text-gray-400">29,734 / 1,048,576</div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-1">Tools</h3>
+          <div class="flex items-center">
+            <label class="inline-flex items-center space-x-2">
+              <input type="checkbox"
+                class="form-checkbox h-5 w-5 text-gray-600 rounded border-gray-500 focus:ring-gray-500 bg-gray-700">
+              <span>Code execution</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-1">Advanced settings</h3>
+          <div>
+            <button class="text-sm text-gray-500 hover:text-gray-400 block w-full text-left py-1">Safety settings <i
+                class="fas fa-chevron-right ml-1"></i></button>
+            <button class="text-sm text-gray-500 hover:text-gray-400 block w-full text-left py-1">Add stop sequence <i
+                class="fas fa-chevron-right ml-1"></i></button>
+            <button class="text-sm text-gray-500 hover:text-gray-400 block w-full text-left py-1">Output length <i
+                class="fas fa-chevron-right ml-1"></i></button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="history_add2_script.js"></script> <!-- ✨ 분리된 JavaScript 파일 링크 ✨ -->
+  <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9219a039decbb0d5',t:'MTc0MjE4NDQ3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/history_add2_script.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>

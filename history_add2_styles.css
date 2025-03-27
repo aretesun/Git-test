@@ -1,0 +1,407 @@
+
+/* 기존 스타일 유지 (생략) */
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.cont {
+  flex: 1 1 0;
+  overflow-y: auto;
+}
+
+#chat-area {
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-area>div {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  max-width: 80%;
+  white-space: pre-wrap;
+}
+
+#chat-area>div.user-message {
+  background-color: #4B5563;
+  align-self: flex-end;
+}
+
+#chat-area>div.bot-message {
+  background-color: #6B7280;
+  align-self: flex-start;
+}
+
+#chat-area>div.system-message,
+#chat-area>div.error-message {
+  background-color: #9CA3AF;
+  color: black;
+  align-self: center;
+  text-align: center;
+}
+
+#chat-area>div.error-message {
+  background-color: #F87171;
+  color: black;
+}
+
+#chat-area>div.loading-message {
+  background-color: #6B7280;
+  align-self: flex-start;
+  font-style: italic;
+  color: #CBD5E0;
+}
+
+#url-area {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+#url-area label {
+  margin-right: 0.5rem;
+  color: white;
+}
+
+#server-domain {
+  background-color: #374151;
+  color: white;
+  border: 1px solid #4B5563;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  margin-right: 0.5rem;
+  width: 200px;
+}
+
+#set-url {
+  @apply px-3 py-1.5 text-sm !rounded-button bg-gray-700 hover:bg-gray-600;
+}
+
+#full-url {
+  color: #9CA3AF;
+  margin-left: 1rem;
+  word-break: break-all; /* URL이 길 경우 줄바꿈 */
+}
+
+.loading-message-dot {
+  animation: dot-pulse 1.5s infinite;
+}
+
+.loading-message-dot:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.loading-message-dot:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes dot-pulse {
+  0% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
+}
+
+/* ✨✨✨ 사이드바 스타일 ✨✨✨ */
+#settings-sidebar {
+  margin-left: auto;
+  transform: translateX(0);
+}
+
+#settings-sidebar.collapsed {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-left: none;
+  overflow: hidden;
+  transform: translateX(100%);
+}
+
+#settings-sidebar.collapsed+main {
+  margin-right: 0;
+}
+
+/* ✨✨✨ 채팅 히스토리 사이드바 스타일 ✨✨✨ */
+#chat-history-sidebar {
+  width: 200px; /* 채팅 히스토리 사이드바 너비 */
+  background-color: #2D3748; /* 약간 더 어두운 배경색 */
+  border-right: 1px solid #4A5568;
+  padding: 1rem;
+  display: flex; /* flex container로 설정 */
+  flex-direction: column; /* 수직 방향 정렬 */
+}
+
+/* ✨✨✨ 채팅 히스토리 목록 스타일 ✨✨✨ */
+#chat-history-list {
+  overflow-y: auto;
+  flex-grow: 1; /* 목록이 남은 공간을 모두 차지하도록 설정 */
+}
+
+#chat-history-list button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: #374151;
+  color: #CBD5E0;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  overflow: hidden; /* 제목이 길 경우 ...으로 처리 */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#chat-history-list button:hover {
+  background-color: #4B5563;
+}
+
+
+/* ✨✨✨ 사이드바 펼치기 버튼 스타일 ✨✨✨ */
+ #expand-sidebar-button {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+#expand-sidebar-button.visible {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+
+#settings-sidebar.collapsed~#expand-sidebar-button {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ✨✨✨ 여행 정보 폼 스타일 ✨✨✨ */
+.travel-input-box {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #374151;
+  align-self: flex-start;
+  max-width: 80%;
+}
+
+.travel-input-box label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #CBD5E0;
+  font-size: 0.9rem;
+}
+
+.travel-input-box input[type="text"],
+.travel-input-box input[type="date"] {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #4B5563;
+  background-color: #4B5563;
+  color: white;
+}
+
+.travel-input-box button {
+  @apply px-3 py-1.5 text-sm !rounded-button bg-gray-700 hover:bg-gray-600;
+  margin-top: 0.5rem;
+}
+
+/* ✨✨✨ 전체 삭제 버튼 스타일 ✨✨✨ */
+#delete-history-button {
+  @apply px-3 py-1.5 text-sm !rounded-button bg-red-700 hover:bg-red-600;
+  margin-top: 1rem; /* 히스토리 목록과 간격 */
+}
+
+/* ✨✨✨ 추론 시간 스타일 ✨✨✨ */
+.inference-time {
+  font-size: 0.8rem; /* 더 작은 글꼴 크기 */
+  color: #9CA3AF; /* 옅은 회색 */
+  margin-left: 0.3rem; /* 약간의 왼쪽 여백 */
+}
+
+/* ✨✨✨ 텍스트 입력 영역 스타일 추가 ✨✨✨ */
+#user-input {
+  min-height: 46px; /* 초기 높이 (py-3 * 2 + line-height 정도). 필요시 조절하세요. */
+  max-height: 150px; /* 최대 높이. 이 값을 넘으면 스크롤이 생깁니다. 원하는 값으로 조절하세요. */
+  transition: height 0.2s ease-in-out; /* 높이 변경 시 부드러운 전환 효과 */
+  /* resize: none; 클래스로 적용했지만, CSS로도 명시할 수 있습니다. */
+  /* overflow-y: hidden; 클래스로 적용했지만, CSS로도 명시할 수 있습니다. */
+}
+
+/* 스크롤바 스타일 (선택 사항 - 웹킷 기반 브라우저용) */
+#user-input::-webkit-scrollbar {
+  width: 8px; /* 스크롤바 너비 */
+}
+
+#user-input::-webkit-scrollbar-track {
+  background: #374151; /* 스크롤바 트랙 배경색 */
+  border-radius: 4px;
+}
+
+#user-input::-webkit-scrollbar-thumb {
+  background-color: #6B7280; /* 스크롤바 색상 */
+  border-radius: 4px;
+  border: 2px solid #374151; /* 트랙 배경과 동일한 테두리 추가 */
+}
+
+#user-input::-webkit-scrollbar-thumb:hover {
+  background-color: #9CA3AF; /* 스크롤바 호버 시 색상 */
+}
+
+/* ✨✨✨ 마크다운 및 코드 블록 스타일 ✨✨✨ */
+
+/* 마크다운으로 생성된 <pre> 요소 스타일 */
+.bot-message pre {
+  background-color: #1F2937; /* 어두운 배경색 (Tailwind gray-800) */
+  border: 1px solid #374151; /* 약간 밝은 테두리 (Tailwind gray-700) */
+  border-radius: 0.375rem; /* 둥근 모서리 (Tailwind rounded-md) */
+  padding: 1rem; /* 내부 여백 */
+  overflow-x: auto; /* 가로 스크롤 필요시 표시 */
+  white-space: pre; /* 공백 및 줄바꿈 유지 */
+  position: relative; /* 복사 버튼 absolute 위치의 기준 */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 마크다운으로 생성된 <code> 요소 스타일 (pre 내부) */
+.bot-message pre code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace; /* 고정폭 폰트 */
+  font-size: 0.875rem; /* 약간 작은 글꼴 크기 */
+  color: #E5E7EB; /* 밝은 회색 텍스트 (Tailwind gray-200) */
+  background-color: transparent; /* pre 배경색 사용 */
+  padding: 0; /* code 자체의 패딩 제거 */
+  white-space: inherit; /* pre의 white-space 설정 따름 */
+}
+
+/* 마크다운 인라인 코드 `code` 스타일 (pre 외부) */
+.bot-message code:not(pre code) {
+  background-color: #374151; /* pre보다 약간 밝은 배경 (Tailwind gray-700) */
+  color: #FBBF24; /* 강조 색상 (Tailwind amber-400) - 필요시 조정 */
+  padding: 0.1em 0.3em;
+  border-radius: 0.25rem;
+  font-size: 0.85em; /* 주변 텍스트보다 약간 작게 */
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* 마크다운 목록 스타일 */
+.bot-message ul,
+.bot-message ol {
+  padding-left: 1.5rem; /* 들여쓰기 */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.bot-message ul {
+  list-style-type: disc; /* 기본 불릿 */
+}
+.bot-message ol {
+  list-style-type: decimal; /* 숫자 목록 */
+}
+.bot-message li {
+  margin-bottom: 0.25rem;
+}
+
+/* 마크다운 강조 스타일 */
+.bot-message strong, .bot-message b {
+  font-weight: 600; /* 조금 더 굵게 (Tailwind font-semibold) */
+}
+.bot-message em, .bot-message i {
+  font-style: italic;
+}
+
+/* ✨✨✨ 코드 블록 복사 버튼 스타일 ✨✨✨ */
+.copy-code-button {
+  position: absolute; /* pre 요소 내에서 절대 위치 */
+  top: 0.5rem; /* 위쪽 여백 */
+  right: 0.5rem; /* 오른쪽 여백 */
+  background-color: #4B5563; /* 버튼 배경색 (Tailwind gray-600) */
+  color: #E5E7EB; /* 버튼 글자색 (Tailwind gray-200) */
+  border: none;
+  border-radius: 0.25rem; /* 약간 둥근 모서리 */
+  padding: 0.25rem 0.5rem; /* 버튼 내부 여백 */
+  font-size: 0.75rem; /* 작은 글꼴 크기 */
+  cursor: pointer;
+  opacity: 0.7; /* 평소에는 약간 투명하게 */
+  transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+/* pre 요소에 마우스 올렸을 때 버튼 보이게 (선택 사항) */
+.bot-message pre:hover .copy-code-button {
+  opacity: 1; /* 마우스 올리면 완전 불투명하게 */
+}
+
+.copy-code-button:hover {
+  background-color: #6B7280; /* 호버 시 배경색 변경 (Tailwind gray-500) */
+}
+
+.copy-code-button:disabled {
+  background-color: #059669; /* 복사 성공 시 색상 (Tailwind green-600) */
+  color: white;
+  cursor: default;
+  opacity: 1;
+}
+
+/* ✨✨✨ 기록 관리 버튼 스타일 (기본 Tailwind 외 추가/수정) ✨✨✨ */
+#export-history-button {
+  /* Tailwind: bg-blue-700 hover:bg-blue-600 */
+  /* 필요시 추가 스타일 */
+}
+
+#import-history-button {
+  /* Tailwind: bg-green-700 hover:bg-green-600 */
+  /* 필요시 추가 스타일 */
+}
+
+#delete-history-button {
+  /* 기존 스타일 유지 또는 재정의 (Tailwind 클래스 제거 시) */
+   background-color: #B91C1C; /* red-700 */
+   color: white;
+   padding: 0.375rem 0.75rem; /* py-1.5 px-3 */
+   font-size: 0.875rem; /* text-sm */
+   border-radius: var(--rounded-button); /* Tailwind config 값 사용 */
+   width: 100%;
+}
+
+#delete-history-button:hover {
+   background-color: #991B1B; /* red-800 (hover:bg-red-600 대신 사용 예시) */
+}
+
+/* 버튼 영역 간격 (Tailwind space-y-2 대체 시) */
+/*
+#chat-history-sidebar .mt-4 > button + button {
+  margin-top: 0.5rem;
+}
+*/
+
+/* ✨✨✨ 스트리밍 로딩 표시 스타일 ✨✨✨ */
+.thinking-indicator {
+  color: #9CA3AF; /* Tailwind gray-400 */
+  font-style: italic;
+}
+
+/* (선택 사항) 로딩 중 커서 애니메이션 */
+.thinking-indicator::after {
+  content: '▍';
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  font-style: normal;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
